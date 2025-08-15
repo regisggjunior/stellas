@@ -1,0 +1,47 @@
+Você é um engenheiro full-stack. Crie um projeto **Next.js (App Router) + TypeScript + Tailwind** para a landing do **Instituto Stellas**, com build e execução prontos no Replit (e também exportáveis para Docker).
+
+## Identidade
+- Nome: Instituto Stellas
+- Slogan: “Do trauma à transformação: um caminho possível com apoio.”
+- Cores: Vinho #7B1E3B, Dourado #D4AF37, Bege #FAF5E9
+- Tipografia: Inter/Similar (web-safe em fallback)
+- `public/logo.png` e `public/favicon.ico` (use placeholders, mas crie os arquivos)
+
+## Estrutura e Conteúdo
+- **Header** (sticky) com logo e âncoras (Home, Sobre, Contato).
+- **Hero** com headline + subheadline + CTA “Conheça o Instituto”.
+- **Sobre**: texto institucional curto (use o texto do prompt Lovable).
+- **Missão/Visão/Valores** em 3 cards.
+- **Áreas de atuação** (4 cards com ícones).
+- **Faixa de impacto** (CTA “Quero apoiar”).
+- **Contato** com form (Formspree placeholder), email `contato@institutostellas.com.br`.
+- **Footer** com direitos autorais e redes sociais (placeholders).
+
+## Arquitetura
+- `src/app/layout.tsx`: metadata (title/desc), `<html lang="pt-BR">`, header/footer, import `globals.css`.
+- `src/app/page.tsx`: compõe as seções.
+- `src/app/globals.css`: Tailwind + utilitárias de cor (vinho/dourado/bege).
+- `components/*`: Header, Hero, Section, Card, Footer, ImpactStrip.
+- `data/*`: `areas.ts`, `social.ts`.
+
+## Tailwind
+- Instalar e configurar `tailwindcss`, `postcss`, `autoprefixer`.
+- `tailwind.config.ts` com `content` apontando para `./src/**/*.{ts,tsx}`.
+- Classes utilitárias extras:
+  - `.bg-vinho`, `.bg-dourado`, `.bg-bege`, `.text-vinho`, `.text-dourado`.
+
+## Acessibilidade e SEO
+- Aria/alt em imagens, semântica correta, contraste.
+- Open Graph básico, `metadata` em `layout.tsx`.
+
+## Scripts e Execução (Replit)
+- Scripts no `package.json`:
+  ```json
+  {
+    "scripts": {
+      "dev": "next dev -p 3000",
+      "build": "next build",
+      "start": "next start -p 3000",
+      "lint": "next lint"
+    }
+  }
