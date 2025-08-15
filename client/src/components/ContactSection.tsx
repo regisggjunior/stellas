@@ -70,7 +70,7 @@ export default function ContactSection() {
     {
       icon: Mail,
       title: "Email",
-      content: "contato@institutostellas.com.br",
+      content: "institutostellas@gmail.com",
       color: "bg-stellas-teal"
     },
     {
