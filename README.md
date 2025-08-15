@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Instituto Stellas - Landing Page
 
 <div align="center">
@@ -958,3 +959,6 @@ Este projeto está licenciado sob a **Licença MIT** - veja o arquivo [LICENSE](
 **🌟 [Acesse o site](https://institutostellas.com.br) • 📧 [Entre em contato](mailto:institutostellas@gmail.com) • ⭐ [Dê uma estrela](https://github.com/regisggjunior/stellas/stargazers)**
 
 </div>
+=======
+# stellas
+>>>>>>> 8970878136febfd02d33f9352011af0f0ca1c5ed
