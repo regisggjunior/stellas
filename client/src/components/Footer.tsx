@@ -1,4 +1,3 @@
-import { Star } from "lucide-react";
 import { socialLinks } from "@/data/social";
 
 export default function Footer() {
@@ -26,9 +25,11 @@ export default function Footer() {
         <div className="grid md:grid-cols-3 gap-8">
           <div>
             <div className="flex items-center space-x-3 mb-6">
-              <div className="w-10 h-10 bg-stellas-teal rounded-full flex items-center justify-center">
-                <Star className="text-white text-lg" fill="currentColor" size={20} />
-              </div>
+              <img 
+                src="/logo-icon.png" 
+                alt="Instituto Stellas Icon" 
+                className="h-10 w-10"
+              />
               <div>
                 <h3 className="text-xl font-bold text-white">Instituto Stellas</h3>
                 <p className="text-gray-400 text-sm">Do trauma à transformação</p>

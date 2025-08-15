@@ -45,7 +45,12 @@ The contact form implements comprehensive validation using:
 
 ### Styling and Design System
 The application uses a custom design system built on Tailwind CSS:
-- **Custom color palette** reflecting the organization's brand (stellas-teal, stellas-orange, stellas-light)
+- **Custom color palette** reflecting the organization's brand:
+  - Stellas Teal: #247B7F (primary brand color)
+  - Stellas Orange: #F28A3A (accent color)
+  - Stellas Light: #F8F9FA (light backgrounds)
+  - Stellas Dark: #2D3748 (dark text/backgrounds)
+- **Brand assets**: Official Instituto Stellas logos integrated throughout the site
 - **Responsive design** with mobile-first approach
 - **CSS custom properties** for consistent theming
 - **shadcn/ui components** for accessibility and consistency

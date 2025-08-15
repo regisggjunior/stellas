@@ -62,7 +62,7 @@ export default {
           ring: "var(--sidebar-ring)",
         },
         'stellas-teal': '#247B7F',
-        'stellas-orange': '#F28A3A',
+        'stellas-orange': '#F28A3A', 
         'stellas-light': '#F8F9FA',
         'stellas-dark': '#2D3748'
       },

@@ -1,4 +1,4 @@
-import { Star, Heart, Phone } from "lucide-react";
+import { Heart, Phone } from "lucide-react";
 
 export default function Hero() {
   const scrollToSection = (sectionId: string) => {
@@ -19,8 +19,12 @@ export default function Hero() {
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
           <div className="mb-8">
-            <div className="w-20 h-20 mx-auto mb-6 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
-              <Star className="text-4xl text-white" fill="currentColor" size={32} />
+            <div className="w-20 h-20 mx-auto mb-6 flex items-center justify-center">
+              <img 
+                src="/logo-icon.png" 
+                alt="Instituto Stellas" 
+                className="w-16 h-16 filter brightness-0 invert"
+              />
             </div>
             <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
               Do trauma à <span className="text-stellas-orange">transformação</span>
