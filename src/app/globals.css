@@ -1,0 +1,152 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom Instituto Stellas styles */
+.stellas-gradient {
+  background: linear-gradient(135deg, #247B7F 0%, #F28A3A 100%);
+}
+
+.stellas-text-gradient {
+  background: linear-gradient(135deg, #247B7F 0%, #F28A3A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stellas-shadow {
+  box-shadow: 0 10px 25px rgba(36, 123, 127, 0.15);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Form styles */
+.form-input {
+  @apply w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-stellas-teal focus:border-transparent transition-all duration-200;
+}
+
+.form-label {
+  @apply block text-sm font-medium text-stellas-dark mb-2;
+}
+
+/* Button styles */
+.btn-primary {
+  @apply bg-stellas-teal hover:bg-stellas-teal/90 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl;
+}
+
+.btn-secondary {
+  @apply bg-stellas-orange hover:bg-stellas-orange/90 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl;
+}
+
+/* Esconder indicadores de desenvolvimento do Next.js */
+#__next-build-watcher,
+.__next-dev-overlay,
+[data-nextjs-dialog],
+[data-nextjs-dialog-overlay], 
+[data-nextjs-toast],
+[data-overlay],
+div[data-nextjs-dialog-left-right],
+button[aria-label*="error" i],
+button[aria-label*="Error" i],
+button[title*="error" i],
+button[title*="Error" i] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Esconder overlay de erro específico */
+[data-nextjs-dialog-overlay] {
+  display: none !important;
+}
+
+/* Esconder botão circular de erro */
+button[data-nextjs-errors-dialog-left-right] {
+  display: none !important;
+}
+
+/* Esconder SVG de loading do Next.js */
+svg[data-next-mark-loading],
+svg[data-next-mark-loading="false"],
+svg[data-next-mark-loading="true"],
+[data-next-mark-loading] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Esconder container do indicador Next.js */
+div:has(svg[data-next-mark-loading]) {
+  display: none !important;
+}
+
+/* Esconder qualquer SVG Next.js com viewBox específico */
+svg[viewBox="0 0 40 40"][width="40"][height="40"] {
+  display: none !important;
+}

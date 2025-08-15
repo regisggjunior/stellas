@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  stellas-landingpage:
+    build: .
+    container_name: stellas-landingpage
+    ports:
+      - "5002:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
+      - DATABASE_URL=${DATABASE_URL}
+    restart: unless-stopped
+    networks:
+      - stellas_network
+
+networks:
+  stellas_network:
+    driver: bridge

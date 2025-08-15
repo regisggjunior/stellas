@@ -1,0 +1,98 @@
+version: '3.8'
+
+services:
+  # Traefik Proxy
+  traefik:
+    image: traefik:v3.0
+    container_name: traefik
+    restart: unless-stopped
+    command:
+      - "--api.dashboard=true"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.email=institutostellas@gmail.com"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+      - "--log.level=INFO"
+      - "--accesslog=true"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8081:8080" # Dashboard Traefik
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - traefik_letsencrypt:/letsencrypt
+    networks:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dashboard.rule=Host(`traefik.institutostellas.com.br`)"
+      - "traefik.http.routers.dashboard.entrypoints=websecure"
+      - "traefik.http.routers.dashboard.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.dashboard.service=api@internal"
+
+  # Instituto Stellas Landing Page
+  stellas-landingpage:
+    build: .
+    container_name: stellas-landingpage
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    networks:
+      - traefik
+      - stellas_network
+    labels:
+      # Traefik enable
+      - "traefik.enable=true"
+      
+      # HTTP (porta 80) - Redirect to HTTPS
+      - "traefik.http.routers.stellas-http.rule=Host(`institutostellas.com.br`) || Host(`www.institutostellas.com.br`)"
+      - "traefik.http.routers.stellas-http.entrypoints=web"
+      - "traefik.http.routers.stellas-http.middlewares=stellas-redirect"
+      
+      # HTTPS (porta 443)
+      - "traefik.http.routers.stellas-https.rule=Host(`institutostellas.com.br`) || Host(`www.institutostellas.com.br`)"
+      - "traefik.http.routers.stellas-https.entrypoints=websecure"
+      - "traefik.http.routers.stellas-https.tls=true"
+      - "traefik.http.routers.stellas-https.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.stellas-https.middlewares=stellas-headers"
+      
+      # Service configuration
+      - "traefik.http.services.stellas.loadbalancer.server.port=3000"
+      
+      # Middleware: Redirect HTTP to HTTPS
+      - "traefik.http.middlewares.stellas-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.stellas-redirect.redirectscheme.permanent=true"
+      
+      # Middleware: Security headers
+      - "traefik.http.middlewares.stellas-headers.headers.customrequestheaders.X-Forwarded-Proto=https"
+      - "traefik.http.middlewares.stellas-headers.headers.accesscontrolalloworiginlist=*"
+      - "traefik.http.middlewares.stellas-headers.headers.customresponseheaders.X-Frame-Options=SAMEORIGIN"
+      - "traefik.http.middlewares.stellas-headers.headers.customresponseheaders.X-XSS-Protection=1; mode=block"
+      - "traefik.http.middlewares.stellas-headers.headers.customresponseheaders.X-Content-Type-Options=nosniff"
+      
+      # WWW redirect (optional)
+      - "traefik.http.middlewares.stellas-www.redirectregex.regex=^https://www\\.institutostellas\\.com\\.br/(.*)"
+      - "traefik.http.middlewares.stellas-www.redirectregex.replacement=https://institutostellas.com.br/$${1}"
+      - "traefik.http.middlewares.stellas-www.redirectregex.permanent=true"
+
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  traefik_letsencrypt:
+    driver: local
+
+networks:
+  traefik:
+    driver: bridge
+    external: false
+  stellas_network:
+    driver: bridge
