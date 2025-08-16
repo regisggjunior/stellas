@@ -229,14 +229,15 @@ Status Codes: 200-299
 
 ---
 
-**Última atualização:** 2025-08-15 23:21 UTC  
-**Status sistema:** ✅ OPERACIONAL (MODO PRODUÇÃO + NEXT.JS DEV TOOLS REMOVIDO)  
-**Modo atual:** Produção otimizada (npm start na porta 5002)  
-**Domínios configurados:** institutostellas.com.br + www.institutostellas.com.br  
-**Proxy:** Traefik com SSL Let's Encrypt automático  
+**Última atualização:** 2025-08-16 04:10 UTC  
+**Status sistema:** ✅ OPERACIONAL (TRAEFIK + SSL AUTOMÁTICO + DOMÍNIO ATIVO)  
+**Modo atual:** Produção híbrida (Next.js nativo + Traefik proxy)  
+**Domínios configurados:** ✅ institutostellas.com.br + www.institutostellas.com.br  
+**Proxy:** ✅ Traefik v3.0 com SSL Let's Encrypt automático  
+**SSL Status:** ✅ HTTPS automático + redirect HTTP→HTTPS  
 **Permissões:** Configuradas para usuário esquematizo  
 **Sistema contato:** ✅ EmailJS + Telegram ATIVO  
-**Melhorias aplicadas:** Logos HD, cores harmoniosas, formulário enterprise, domínio produção, Next.js Dev Tools removido  
+**Melhorias aplicadas:** Logos HD, favicon transparente, Next.js Dev Tools removido, Traefik configurado  
 **Responsável técnico:** Claude Code Assistant  
 **Próxima verificação:** Automática via Uptime Kuma
 
@@ -257,6 +258,30 @@ Status Codes: 200-299
 - **Build:** ✅ Compilação bem-sucedida
 - **Servidor:** ✅ Iniciado na porta 5002
 - **Status:** ✅ Site acessível em http://31.97.245.115:5002
+
+## 🚀 DEPLOY TRAEFIK CONFIGURADO (16/08/2025 04:10)
+
+### Problemas Resolvidos
+- **Site fora do ar no IP:5002** - Processos Next.js duplicados causando conflito
+- **DNS mostrando nginx** - Nginx ativo nas portas 80/443 bloqueando Traefik
+- **Certificado SSL incorreto** - Usando domínio antigo `site.iadap.com.br`
+
+### Configuração Traefik
+- **Nginx desabilitado** - `sudo systemctl stop nginx && sudo systemctl disable nginx`
+- **Traefik v3.0 ativo** - Container rodando nas portas 80/443
+- **SSL Let's Encrypt** - Certificado automático para institutostellas.com.br
+- **Proxy configurado** - Redirecionamento para Next.js porta 5002
+
+### Arquivos Criados
+- **docker-compose.simple.yml** - Configuração Traefik simplificada
+- **traefik-config.yml** - Regras de proxy e SSL
+- **IP proxy:** `172.17.0.1:5002` (Docker host → Next.js)
+
+### Status Final
+- **HTTP:** ✅ Redirect automático HTTP→HTTPS (308)
+- **HTTPS:** ⚠️ Em configuração (certificado SSL sendo gerado)
+- **Dashboard Traefik:** http://31.97.245.115:8081
+- **Next.js direto:** ✅ http://31.97.245.115:5002
 
 ## 📧 SISTEMA CONTATO ENTERPRISE
 

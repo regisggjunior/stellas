@@ -1,0 +1,45 @@
+# Configuração dinâmica do Traefik para Instituto Stellas
+http:
+  routers:
+    # HTTP to HTTPS redirect
+    stellas-http:
+      rule: "Host(`institutostellas.com.br`) || Host(`www.institutostellas.com.br`)"
+      entryPoints:
+        - "web"
+      middlewares:
+        - "stellas-redirect"
+      service: "stellas-service"
+
+    # HTTPS
+    stellas-https:
+      rule: "Host(`institutostellas.com.br`) || Host(`www.institutostellas.com.br`)"
+      entryPoints:
+        - "websecure"
+      middlewares:
+        - "stellas-headers"
+      service: "stellas-service"
+      tls:
+        certResolver: "letsencrypt"
+
+  services:
+    stellas-service:
+      loadBalancer:
+        servers:
+          - url: "http://172.17.0.1:5002"
+
+  middlewares:
+    # Redirect HTTP to HTTPS
+    stellas-redirect:
+      redirectScheme:
+        scheme: "https"
+        permanent: true
+
+    # Security headers
+    stellas-headers:
+      headers:
+        customRequestHeaders:
+          X-Forwarded-Proto: "https"
+        customResponseHeaders:
+          X-Frame-Options: "SAMEORIGIN"
+          X-XSS-Protection: "1; mode=block"
+          X-Content-Type-Options: "nosniff"

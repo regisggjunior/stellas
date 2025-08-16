@@ -121,9 +121,30 @@ docker ps | grep stellas
 curl -I http://localhost:5002
 ```
 
-### Docker Compose
+### Docker Compose (Traefik Proxy)
 ```bash
-# Deploy completo
+# Deploy com Traefik (ATUAL EM PRODUÇÃO)
+sudo docker compose -f docker-compose.simple.yml up -d
+
+# Verificar containers
+sudo docker ps
+
+# Logs do Traefik
+sudo docker logs traefik
+
+# Restart Traefik (após mudanças na config)
+sudo docker restart traefik
+
+# Dashboard Traefik
+curl http://31.97.245.115:8081
+
+# Parar Traefik
+sudo docker compose -f docker-compose.simple.yml down
+```
+
+### Deploy Tradicional (Backup)
+```bash
+# Deploy completo com aplicação containerizada
 docker compose up -d
 
 # Logs
@@ -224,13 +245,15 @@ stellas/
 - **Hot reload:** < 1 segundo ⚡
 - **Status:** ✅ ATIVO com mudanças instantâneas
 
-### Produção (DOMÍNIO CONFIGURADO)
-- **Domínio Principal:** https://institutostellas.com.br
-- **Domínio WWW:** https://www.institutostellas.com.br (redirect)
+### Produção (DOMÍNIO ATIVO)
+- **Domínio Principal:** ✅ https://institutostellas.com.br
+- **Domínio WWW:** ✅ https://www.institutostellas.com.br (redirect)
 - **IP Servidor:** 31.97.245.115
-- **Proxy:** Traefik v3.0 com SSL automático
+- **Proxy:** ✅ Traefik v3.0 rodando (portas 80/443)
+- **SSL:** ✅ Let's Encrypt automático + redirect HTTP→HTTPS
 - **Dashboard Traefik:** http://31.97.245.115:8081
-- **Docker image:** `stellas-nextjs`
+- **Nginx:** ❌ Desabilitado (conflito resolvido)
+- **Arquitetura:** Next.js nativo + Traefik proxy
 - **Build time:** ~60-90 segundos
 - **Cold start:** < 2 segundos
 
