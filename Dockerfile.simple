@@ -1,0 +1,28 @@
+FROM node:18-alpine
+WORKDIR /app
+
+# Copiar package.json 
+COPY package*.json ./
+
+# Instalar apenas dependências de produção
+RUN npm ci --only=production && npm cache clean --force
+
+# Copiar build existente e arquivos necessários
+COPY .next ./.next
+COPY public ./public
+COPY next.config.js ./
+
+# Criar usuário nextjs
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
+
+# Ajustar permissões
+RUN chown -R nextjs:nodejs /app
+
+USER nextjs
+EXPOSE 3000
+
+ENV NODE_ENV=production
+ENV PORT=3000
+
+CMD ["npm", "start"]

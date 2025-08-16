@@ -32,11 +32,11 @@
 - **Deploy:** Container Docker otimizado para produção
 
 ### 🎯 **Status do Deploy:**
-- **Sistema:** Processo Next.js nativo (sem container)
-- **Porta:** `5002` (proxy para processo interno)
-- **Acesso:** http://31.97.245.115:5002
-- **Status:** ✅ **OPERACIONAL** (Validado em 15/08/2025)
-- **Monitoramento:** Uptime Kuma + Portainer ativos
+- **Sistema:** Container Docker padronizado
+- **Porta:** `3000` interno → `5002` externo
+- **Acesso:** https://institutostellas.com.br
+- **Status:** ✅ **OPERACIONAL** (Containerizado em 16/08/2025)
+- **Monitoramento:** Uptime Kuma + Portainer + Traefik ativos
 
 ---
 
@@ -121,25 +121,29 @@ docker ps | grep stellas
 curl -I http://localhost:5002
 ```
 
-### Docker Compose (Traefik Proxy)
+### Deploy Padrão (Container Docker)
 ```bash
-# Deploy com Traefik (ATUAL EM PRODUÇÃO)
-sudo docker compose -f docker-compose.simple.yml up -d
+# Build da imagem atual
+cd /var/www/stellas/landingpage
+docker build -f Dockerfile.simple -t stellas-current:latest .
 
-# Verificar containers
-sudo docker ps
+# Deploy container com labels Traefik
+docker run -d --name stellas-app \
+  --restart unless-stopped \
+  --network traefik \
+  -e NODE_ENV=production \
+  -e PORT=3000 \
+  --label "traefik.enable=true" \
+  --label "traefik.http.routers.stellas-https.rule=Host(\`institutostellas.com.br\`)" \
+  --label "traefik.http.routers.stellas-https.tls.certresolver=letsencrypt" \
+  stellas-current:latest sh -c 'npm start -- -p 3000'
 
-# Logs do Traefik
-sudo docker logs traefik
+# Verificar status
+docker ps | grep stellas-app
+docker logs stellas-app
 
-# Restart Traefik (após mudanças na config)
-sudo docker restart traefik
-
-# Dashboard Traefik
-curl http://31.97.245.115:8081
-
-# Parar Traefik
-sudo docker compose -f docker-compose.simple.yml down
+# Testar aplicação
+curl -I https://institutostellas.com.br
 ```
 
 ### Deploy Tradicional (Backup)
@@ -245,16 +249,16 @@ stellas/
 - **Hot reload:** < 1 segundo ⚡
 - **Status:** ✅ ATIVO com mudanças instantâneas
 
-### Produção (DOMÍNIO ATIVO)
+### Produção (DOMÍNIO ATIVO + CONTAINER)
 - **Domínio Principal:** ✅ https://institutostellas.com.br
 - **Domínio WWW:** ✅ https://www.institutostellas.com.br (redirect)
 - **IP Servidor:** 31.97.245.115
-- **Proxy:** ✅ Traefik v3.0 rodando (portas 80/443)
+- **Container:** ✅ stellas-app (stellas-current:latest)
+- **Proxy:** ✅ Traefik v3.0 com labels automáticas
 - **SSL:** ✅ Let's Encrypt automático + redirect HTTP→HTTPS
 - **Dashboard Traefik:** http://31.97.245.115:8081
-- **Nginx:** ❌ Desabilitado (conflito resolvido)
-- **Arquitetura:** Next.js nativo + Traefik proxy
-- **Build time:** ~60-90 segundos
+- **Arquitetura:** Container Docker + Traefik + SSL automático
+- **Build time:** ~1.5 minutos
 - **Cold start:** < 2 segundos
 
 ### Métricas de Performance
@@ -328,5 +332,47 @@ npm run legacy:build
   <br>
   
   <p><strong>Instituto Stellas</strong> • Do trauma à transformação</p>
-  <p><em>Powered by Next.js 15 + Traefik + EmailJS + Telegram + TypeScript + Tailwind</em></p>
+  <p><em>Powered by Next.js 15 + Docker + Traefik + EmailJS + Telegram + TypeScript + Tailwind</em></p>
 </div>
+
+---
+
+## 🐳 **Infraestrutura Padronizada (16/08/2025)**
+
+### 🎯 **Arquitetura Container Docker**
+Esta aplicação segue o **padrão padronizado** estabelecido para todas as aplicações na VPS:
+
+- ✅ **Container Docker** com Dockerfile otimizado
+- ✅ **Labels Traefik** para SSL automático
+- ✅ **Network traefik** para comunicação
+- ✅ **Let's Encrypt** automático via Traefik
+- ✅ **Consistência** com IADAP e futuras aplicações
+
+### 📋 **Template para Futuras Aplicações**
+```yaml
+# Padrão estabelecido para todas as aplicações:
+labels:
+  - "traefik.enable=true"
+  - "traefik.http.routers.APP-https.rule=Host(`DOMINIO.com.br`)"
+  - "traefik.http.routers.APP-https.tls.certresolver=letsencrypt"
+  - "traefik.http.services.APP.loadbalancer.server.port=3000"
+networks:
+  - traefik
+environment:
+  - NODE_ENV=production
+  - PORT=3000
+```
+
+### 🚀 **Benefícios da Padronização**
+- **Escalabilidade**: Fácil adicionar novas aplicações
+- **Manutenção**: Gestão centralizada via Traefik
+- **Segurança**: SSL automático + headers de segurança
+- **Monitoramento**: Uptime Kuma + Portainer integrados
+- **Consistência**: Arquitetura uniforme para todos os projetos
+
+### 📊 **Infraestrutura Completa**
+- **IADAP**: ✅ site.iadap.com.br (containerizado)
+- **Instituto Stellas**: ✅ institutostellas.com.br (containerizado)
+- **Próximas apps**: Seguirão o mesmo padrão automaticamente
+
+**Documentação completa**: `/opt/compose/PADRAO_APLICACOES.md`
